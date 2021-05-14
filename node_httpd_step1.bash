@@ -16,7 +16,7 @@ sleep 15
 echo "
 192.168.10.20 node02.local 
 192.168.10.21 node03.local 
-192.168.10.24 node04.local" >> /etc/hosts
+192.168.10.23 node04.local" >> /etc/hosts
 
 #Подготавливаем раздел для хранения данных кластера
 mkdir /opt/gluster
