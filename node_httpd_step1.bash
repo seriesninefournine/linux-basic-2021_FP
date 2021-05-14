@@ -5,7 +5,7 @@ setenforce 0
 systemctl stop firewalld
 
 #Устанавливаем нужное ПО
-yum -y install nano epel-release centos-release-gluster6
+yum -y install nano epel-release centos-release-gluster6 yum-utils
 yum -y install ntp ntpdate glusterfs-server
 systemctl enable ntpd
 systemctl start ntpd
@@ -33,8 +33,31 @@ if [ $NodeIP == "192.168.10.20" ]; then
   gluster peer probe  node03.local
   gluster peer probe  node04.local
 
-  #Запускаем кластер
-  #gluster volume create httpd_data replica 3 node0{2,3,4}.local:/opt/gluster-volume force
+  #Создание тома хранения
+  gluster volume create httpd_data replica 3 node0{2,3,4}.local:/opt/gluster-volume force
+else
+  sleep 5
 fi
 
-gluster volume create httpd_data replica 3 $HOSTNAME:/opt/gluster-volume force
+mkdir /var/www
+echo "localhost:/httpd_data /var/www glusterfs defaults,_netdev,backupvolfile-server=localhost 0 0" >> /etc/fstab
+gluster volume start httpd_data
+gluster volume status httpd_data
+mount -a
+
+#Устанавливаем httpd + php с необходимыми модулями
+rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+yum-config-manager --disable remi-safe
+yum-config-manager --enable remi
+yum-config-manager --enable remi-php74
+
+yum -y install httpd php74 wget
+
+if [ $NodeIP == "192.168.10.20" ]; then
+  mkdir ./glpi
+  cd ./glpi
+  wget --no-check-certificate https://github.com/glpi-project/glpi/releases/download/9.5.5/glpi-9.5.5.tgz
+  tar -xzf glpi-9.5.5.tgz
+  cd ./glpi
+fi
