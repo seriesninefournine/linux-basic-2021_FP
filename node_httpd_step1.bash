@@ -32,6 +32,7 @@ if [ $NodeIP == "192.168.10.20" ]; then
   gluster peer probe  node03.local
   gluster peer probe  node04.local
   gluster volume create httpd_data replica 3 node0{2,3,4}.local:/opt/gluster-volume force
+  echo "=====================ALLL OKKKK======================"
 else
   sleep 5
 fi
