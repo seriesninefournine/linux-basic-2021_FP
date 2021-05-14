@@ -28,12 +28,9 @@ NodeIP=$(ip addr  | grep 'inet'| egrep -v '127.0.0.1|inet6' | cut -b 10-22)
 #Запускаем добавление узлов кластера только на одном из участников кластера 
 
 if [ $NodeIP == "192.168.10.20" ]; then
-  #Добавляем узлы кластера в пул
   gluster peer probe  node02.local
   gluster peer probe  node03.local
   gluster peer probe  node04.local
-
-  #Создание тома хранения
   gluster volume create httpd_data replica 3 node0{2,3,4}.local:/opt/gluster-volume force
 else
   sleep 5
