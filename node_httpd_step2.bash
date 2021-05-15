@@ -1,8 +1,8 @@
 #!/bin/bash
 
 gluster volume start httpd_data
-mkdir /var/www
-echo 'localhost:/httpd_data /var/www glusterfs defaults,_netdev,backupvolfile-server=localhost 0 0' >> /etc/fstab
+mkdir /mnt/gluster
+echo 'localhost:/httpd_data /mnt/gluster glusterfs defaults,_netdev,backupvolfile-server=localhost 0 0' >> /etc/fstab
 mount -a
 
 #Устанавливаем httpd + php с необходимыми модулями
