@@ -19,5 +19,6 @@ echo "
 192.168.10.23 node04.local" >> /etc/hosts
 
 #Запускаем кластер
+mkdir /opt/gluster-volume
 sudo systemctl enable glusterd
 sudo systemctl start glusterd
