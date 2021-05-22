@@ -5,27 +5,20 @@ setenforce 0
 systemctl stop firewalld
 
 #Устанавливаем нужное ПО
-yum -y install nano epel-release
-yum -y install ntp ntpdate nginx git
-systemctl enable ntpd nginx
+yum -y install nano epel-release centos-release-gluster6 yum-utils
+yum -y install ntp ntpdate glusterfs-server
+systemctl enable ntpd
 systemctl start ntpd
-ntpdate -s ntp.ubuntu.com
+ntpdate -s ru.pool.ntp.org
 sleep 15
 
-#Генерируем ключи для git
-ssh-keygen -P "" -f /root/.ssh/id_rsa
+#добавляем адреса узлов кластера
+echo "
+192.168.10.20 node02.local 
+192.168.10.21 node03.local 
+192.168.10.23 node04.local" >> /etc/hosts
 
-echo '-------rsa key begin-------'
-cat /root/.ssh/id_rsa.pub
-echo '--------rsa key end--------'
-read -p "Нажмите любую кнопку для продолжения скрипта"
-
-#скачиваем и помещаем в нужные директории конфигурационные файлы nginx
-mkdir nginx_cfg
-cd ./nginx_cfg
-
-git clone git@github.com:seriesninefournine/linux-basic-2021_FP.git
-mv ./linux-basic-2021_FP/node01cfg/nginx.conf /etc/nginx/
-mv ./linux-basic-2021_FP/node01cfg/upstream.conf /etc/nginx/conf.d/
-
-systemctl start nginx
+#Запускаем кластер
+mkdir /opt/gluster-volume
+sudo systemctl enable glusterd
+sudo systemctl start glusterd
