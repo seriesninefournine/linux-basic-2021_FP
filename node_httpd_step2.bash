@@ -16,7 +16,6 @@ Description=gluster mount
 Requires=network-online.target
 [Automount]
 Where=/var/www
-TimeoutIdleSec=301
 [Install]
 WantedBy=remote-fs.target" > /etc/systemd/system/var-www.automount
 
