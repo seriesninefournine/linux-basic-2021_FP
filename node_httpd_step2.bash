@@ -24,7 +24,7 @@ WantedBy=remote-fs.target" > /etc/systemd/system/var-www.automount
 chmod +x /etc/systemd/system/var-www.*
 systemctl daemon-reload
 systemctl enable var-www.automount
-systemctl start var-www.automountww
+systemctl start var-www.automountw
 
 #Устанавливаем httpd + php с необходимыми модулями
 rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-7.rpm
