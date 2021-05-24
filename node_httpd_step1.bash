@@ -8,10 +8,9 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 #Устанавливаем нужное ПО
-yum -y install nano epel-release centos-release-gluster6 yum-utils
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum -y install ntp ntpdate glusterfs-server docker-ce docker-ce-cli containerd.io
-systemctl enable ntpd docker
+yum -y install wget nano epel-release centos-release-gluster6 yum-utils
+yum -y install ntp ntpdate glusterfs-server
+systemctl enable ntpd 
 systemctl start ntpd
 ntpdate -s ru.pool.ntp.org
 sleep 15

@@ -26,5 +26,11 @@ chmod +x /etc/systemd/system/mnt-gluster.*
 systemctl enable mnt-gluster.automount
 systemctl start mnt-gluster.automount
 
-systemctl start docker
-docker run -it -d -p 80:80 --name httpd-apache -v /mnt/gluster:/var/www/html php:7.2-apache
+#Устанавливаем httpd + php с необходимыми модулями
+rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+yum-config-manager --disable remi-safe
+yum-config-manager --enable remi
+yum-config-manager --enable remi-php74
+
+yum -y install httpd php74
