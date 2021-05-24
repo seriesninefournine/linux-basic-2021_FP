@@ -33,4 +33,8 @@ yum-config-manager --disable remi-safe
 yum-config-manager --enable remi
 yum-config-manager --enable remi-php74
 
-yum -y install httpd php74
+yum -y install httpd
+yum -y install php php-mysqli php-mbstring php-gd php-simplexml php-intl php-ldap php-apcu php-pecl-zendopcache php-xmlrpc php-pear-CAS php-zip
+
+systemctl enable httpd
+systemctl start httpd
