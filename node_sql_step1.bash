@@ -25,8 +25,8 @@ echo "
 
 #Запускаем pacemaker
 echo 'pacpass' | passwd --stdin hacluster
-systemctl enable pacemaker pcsd corosync 
-systemctl start pacemaker pcsd corosync 
+systemctl enable pcsd 
+systemctl start pcsd 
 
 #Настраиваем MySQL
 echo 'bind-address            = 0.0.0.0
@@ -98,3 +98,4 @@ if [ $(hostname) == node07.local ]; then
   pcs constraint order mysql_service01-clone then virtualip
 fi
 
+systemctl enable pacemaker corosync 
