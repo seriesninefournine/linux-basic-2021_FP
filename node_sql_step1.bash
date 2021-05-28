@@ -83,6 +83,7 @@ if [ $(hostname) == node07.local ]; then
   mysql -u 'root' -p$MYSQL_PASS -e "CHANGE MASTER TO MASTER_HOST='node06.local', MASTER_USER='replicator07', MASTER_PASSWORD='$MYSQL_PASS', GET_MASTER_PUBLIC_KEY = 1, MASTER_AUTO_POSITION=1;"
   mysql -u 'root' -p$MYSQL_PASS -e "START SLAVE;"
   mysql -u 'root' -p$MYSQL_PASS -e "create user 'root'@'%' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_PASS'; GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'; flush privileges;"
+  mysql -u 'root' -p$MYSQL_PASS -e "CREATE DATABASE wordpress;"
   systemctl stop mysqld
   
   #Настраиваем pacemaker

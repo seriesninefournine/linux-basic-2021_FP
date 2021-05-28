@@ -8,7 +8,7 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 #Устанавливаем нужное ПО
-yum -y install wget nano ntp ntpdate 
+yum -y install wget nano ntp ntpdate rsync
 systemctl enable ntpd 
 systemctl start ntpd
 ntpdate -s ru.pool.ntp.org
@@ -70,3 +70,36 @@ yum install -y ./grafana-7.5.5-1.x86_64.rpm
 systemctl daemon-reload
 systemctl enable prometheus grafana-server
 systemctl start prometheus grafana-server
+
+#настраиваем rsync
+mkdir /backups
+
+echo "
+  pid file = /var/run/rsyncd.pid
+  lock file = /var/run/rsync.lock
+  log file = /var/log/rsync.log
+  [share]
+  path = /backups
+  hosts allow = 192.168.10.*
+  hosts deny = *
+  list = true
+  uid = root
+  gid = root
+  read only = false" >> /etc/rsyncd.conf
+  
+  echo '
+  [Unit]
+  Description=A program for synchronizing files over a network
+  After=syslog.target network.target
+  ConditionPathExists=/etc/rsyncd.conf
+  
+  [Service]
+  EnvironmentFile=-/etc/sysconfig/rsyncd
+  ExecStart=/usr/bin/rsync --daemon --no-detach "$OPTIONS"
+  
+  [Install]
+  WantedBy=multi-user.target' > /usr/lib/systemd/system/rsyncd.service
+  
+systemctl daemon-reload
+systemctl enable rsyncd
+systemctl start rsyncd
