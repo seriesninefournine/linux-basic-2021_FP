@@ -89,6 +89,7 @@ if [ $(hostname) == node07.local ]; then
   pcs cluster auth node06.local node07.local -u hacluster -p 'pacpass'
   pcs cluster setup --name mysql_cl node06.local node07.local
   pcs cluster start --all
+  pcs cluster enable --all
   pcs property set stonith-enabled=false
   pcs property set no-quorum-policy=ignore
   pcs resource create virtualip ocf:heartbeat:IPaddr2 ip="192.168.10.120" cidr_netmask="24" op monitor interval="10s"
