@@ -30,7 +30,7 @@ mv -f ./upstream.conf /etc/nginx/conf.d/upstream.conf
 
 systemctl start pcsd 
 
-if [ $(hostname) == node01.local ]; then
+if [ $(hostname) == node02.local ]; then
   pcs cluster auth node01.local node02.local -u hacluster -p 'pacpass'
   pcs cluster setup --name hginx_clus node01.local node02.local
   pcs property set stonith-enabled=false
