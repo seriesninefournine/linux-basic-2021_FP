@@ -25,3 +25,34 @@ echo "
 mkdir /opt/gluster-volume
 sudo systemctl enable glusterd
 sudo systemctl start glusterd
+
+if [ $(hostname) == node03.local ]; then
+  gluster peer probe  node03.local
+  gluster peer probe  node04.local
+  gluster peer probe  node05.local
+  sleep 3
+  gluster volume create httpd_data replica 3 arbiter 1 node0{3,4,5}.local:/opt/gluster-volume force
+fi
+
+#Устанавливаем и настраиваем node_exporter
+useradd -M -s /usr/sbin/nologin node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-amd64.tar.gz
+tar -xzf node_exporter-1.1.2.linux-amd64.tar.gz
+cp ./node_exporter-1.1.2.linux-amd64/node_exporter /usr/local/bin/
+chown node_exporter:node_exporter /usr/local/bin/node_exporter
+
+echo "[Unit] 
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/node_exporter.service
+
+systemctl daemon-reload
+systemctl enable node_exporter
+systemctl start node_exporter
